@@ -1,9 +1,4 @@
-    /*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
-package za.co.bc.digdig;
+package dungeon;
 
 import java.util.Random;
 import javafx.application.Application;
@@ -18,6 +13,11 @@ import javafx.stage.Stage;
  * @author anton
  */
 public class Test extends Application {
+
+    private int width = 800;
+    private int height = 600;
+    private int blockSize = 20;
+
     public static void main(String[] args) {
         Application.launch(args);
     }
@@ -27,11 +27,13 @@ public class Test extends Application {
         final Random random = new Random();
         final Group group = new Group();
         final int spacing = 1;
-        for (int i = 0; i < 10; i++) {
-            for (int j = 0; j < 10; j++) {
-                final Rectangle rectangle = new Rectangle(20,20);
-                rectangle.setTranslateX((i * 20 ) + spacing );
-                rectangle.setTranslateY(spacing + (j * 20));
+        int numberOfBlocks = height / blockSize;
+        for (int i = 0; i < numberOfBlocks; i++) {
+            for (int j = 0; j < numberOfBlocks; j++) {
+
+                final Rectangle rectangle = new Rectangle(blockSize, blockSize);
+                rectangle.setTranslateX((i * blockSize ) + spacing );
+                rectangle.setTranslateY(spacing + (j * blockSize));
                 int r = random.nextInt(255),
                     g = random.nextInt(255),
                     b = random.nextInt(255);
@@ -42,15 +44,12 @@ public class Test extends Application {
                     rectangle.setStroke(Color.AQUAMARINE);
                     rectangle.setStrokeWidth(3);
                 });
-                rectangle.setOnMouseExited(e -> {
-                    rectangle.setStrokeWidth(0);
-                });
+                rectangle.setOnMouseExited(e -> rectangle.setStrokeWidth(0));
                 group.getChildren().add(rectangle);
-                
             }
         }
-        
-        final Scene scene = new Scene(group, 800, 600);
+
+        final Scene scene = new Scene(group, width, height);
         
         primaryStage.setScene(scene);
         primaryStage.show();
