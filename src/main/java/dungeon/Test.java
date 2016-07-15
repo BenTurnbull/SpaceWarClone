@@ -18,7 +18,6 @@ public class Test extends Application {
     private static final int HEIGHT = (SPACING + BLOCKSIZE) * NUMBER_OF_BLOCKS;
 
     public static void main(String[] args) {
-
         // backend
         final EventBus eventBus = new EventBus();
         final DungeonModel dungeonModel = new DungeonModel(eventBus, NUMBER_OF_BLOCKS);
