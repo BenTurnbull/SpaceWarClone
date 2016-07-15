@@ -1,5 +1,7 @@
 package dungeon;
 
+import com.google.common.eventbus.EventBus;
+import dungeon.events.EventLoop;
 import javafx.application.Application;
 import javafx.scene.Group;
 import javafx.scene.Scene;
@@ -16,6 +18,13 @@ public class Test extends Application {
     private static final int HEIGHT = (SPACING + BLOCKSIZE) * NUMBER_OF_BLOCKS;
 
     public static void main(String[] args) {
+        // backend
+        final EventBus eventBus = new EventBus();
+        final DungeonModel dungeonModel = new DungeonModel(eventBus, NUMBER_OF_BLOCKS);
+        final Thread eventThread = new Thread(new EventLoop(eventBus));
+        eventThread.start();
+
+        // frontend
         Application.launch(args);
     }
 
@@ -28,14 +37,12 @@ public class Test extends Application {
                 final Rectangle rectangle = new Rectangle(BLOCKSIZE, BLOCKSIZE);
                 rectangle.setTranslateX(ix*(BLOCKSIZE + SPACING));
                 rectangle.setTranslateY(iy*(SPACING + BLOCKSIZE));
-                rectangle.setFill(Color.GREEN);
+                rectangle.setFill(Color.SANDYBROWN);
                 rectangle.setOnMouseEntered(e -> {
                     rectangle.setStroke(Color.DARKGRAY);
                     rectangle.setStrokeWidth(3);
                 });
-                rectangle.setOnMouseClicked(e -> {
-                    rectangle.setFill(Color.BROWN);
-                });
+                rectangle.setOnMouseClicked(e -> rectangle.setFill(Color.DARKGRAY));
                 rectangle.setOnMouseExited(e -> rectangle.setStrokeWidth(0));
                 group.getChildren().add(rectangle);
             }
