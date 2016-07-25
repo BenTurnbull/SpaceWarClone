@@ -28,6 +28,7 @@ public class SolarSystem implements Game, ContactListener {
     private final int numberOfPlanets = 20;
 
     private final List<Debris> debris = new ArrayList<>();
+    private final List<Debris> markedForDestruction = new ArrayList<>(); // Cannot destroy bodies during world-step/collision-callback
     private World world;
     private Pane pane;
 
@@ -86,6 +87,7 @@ public class SolarSystem implements Game, ContactListener {
 
     @Override
     public void updatePositions() {
+        checkForDestruction();
         debris.forEach(debris -> debris.updatePosition(this.debris));
     }
 
@@ -102,18 +104,23 @@ public class SolarSystem implements Game, ContactListener {
         if (fA == null || fB == null) return;
         if (fA.getUserData() == null || fB.getUserData() == null) return;
 
-        if (fA.getUserData() == this) {
-            destroyEntity(fB);
+        if (fA.getUserData() instanceof BlackHole) {
+            markedForDestruction.add((Debris) fB.getUserData());
         }
-        if (fB.getUserData() == this) {
-            destroyEntity(fA);
+        if (fB.getUserData() instanceof BlackHole) {
+            markedForDestruction.add((Debris) fA.getUserData());
         }
     }
 
-    private void destroyEntity(Fixture fB) {
-        Debris debris = (Debris) fB.getUserData();
-        world.destroyBody(debris.getBody());
-        pane.getChildren().remove(debris);
+    private void checkForDestruction() {
+        if (markedForDestruction.isEmpty()) return;
+        markedForDestruction.forEach(marked -> {
+                    debris.remove(marked);
+                    world.destroyBody(marked.getBody());
+                    pane.getChildren().remove(marked);
+                }
+        );
+        markedForDestruction.clear();
     }
 
     @Override

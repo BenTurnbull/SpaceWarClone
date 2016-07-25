@@ -34,8 +34,7 @@ class Ship extends Path implements Debris {
         fixtureDef.restitution = 0f;
 
         body = world.createBody(bodyDef);
-        body.createFixture(fixtureDef);
-        body.setUserData(this);
+        body.createFixture(fixtureDef).setUserData(this);
         body.applyLinearImpulse(new Vec2(1, 1), new Vec2());
 
         mass = density * radius;

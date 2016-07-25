@@ -39,8 +39,7 @@ class Planet extends Circle implements Debris {
         fixtureDef.restitution = 0f;
 
         body = world.createBody(bodyDef);
-        body.createFixture(fixtureDef);
-        body.setUserData(this);
+        body.createFixture(fixtureDef).setUserData(this);
         body.applyLinearImpulse(new Vec2(random.nextFloat(), random.nextFloat()), new Vec2());
 
         mass = density * radius;

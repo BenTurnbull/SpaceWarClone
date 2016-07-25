@@ -16,7 +16,7 @@ import java.util.Collection;
 
 import static dungeon.Main.SCALE;
 
-class BlackHole extends Circle implements Debris{
+class BlackHole extends Circle implements Debris {
 
     private final Body body;
     private final float mass;
@@ -38,8 +38,8 @@ class BlackHole extends Circle implements Debris{
         fixtureDef.restitution = 0f;
 
         body = world.createBody(bodyDef);
-        body.createFixture(fixtureDef);
-        body.setUserData(this);
+        body.createFixture(fixtureDef).setUserData(this);
+
         mass = density * radius;
 
         setRadius(radius * SCALE);
