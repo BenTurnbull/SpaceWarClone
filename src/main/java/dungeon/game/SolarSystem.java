@@ -2,6 +2,8 @@ package dungeon.game;
 
 import javafx.geometry.Insets;
 import javafx.scene.input.InputEvent;
+import javafx.scene.input.KeyCode;
+import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.Background;
 import javafx.scene.layout.BackgroundFill;
 import javafx.scene.layout.CornerRadii;
@@ -22,12 +24,14 @@ import static dungeon.Main.*;
 
 public class SolarSystem implements Game, ContactListener {
 
-    private final int numberOfPlanets = 100;
+    private final static int satellites = 0;
 
+    private final List<Player> players = new ArrayList<>();
     private final List<Debris> debris = new ArrayList<>();
     private final List<Debris> markedForDestruction = new ArrayList<>(); // Cannot destroy bodies during world-step/collision-callback
     private World world;
     private Pane pane;
+    private Ship ship;
 
     @Override
     public void load(World world, Pane pane) {
@@ -45,11 +49,12 @@ public class SolarSystem implements Game, ContactListener {
         debris.add(blackHole1);
         pane.getChildren().add(blackHole1);
 
-        Ship ship = new Ship(world, new Vec2(WIDTH / 4, HEIGHT / 4));
+        ship = new Ship(world, new Vec2(WIDTH / 8, HEIGHT / 8));
         debris.add(ship);
+        players.add(ship);
         pane.getChildren().add(ship);
 
-        for (int i = 0; i < numberOfPlanets; i++) {
+        for (int i = 0; i < satellites; i++) {
             Planet planet = new Planet(world);
             debris.add(planet);
             pane.getChildren().add(planet);
@@ -64,8 +69,8 @@ public class SolarSystem implements Game, ContactListener {
     }
 
     @Override
-    public void handle(InputEvent event) {
-        // TODO
+    public void handle(KeyEvent event) {
+        players.forEach(player -> player.handle(event));
     }
 
     @Override

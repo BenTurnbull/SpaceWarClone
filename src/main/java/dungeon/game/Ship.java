@@ -1,5 +1,7 @@
 package dungeon.game;
 
+import javafx.scene.input.KeyCode;
+import javafx.scene.input.KeyEvent;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.*;
 import org.jbox2d.collision.shapes.CircleShape;
@@ -11,7 +13,7 @@ import java.util.Collection;
 
 import static dungeon.Main.SCALE;
 
-class Ship extends Path implements Debris {
+class Ship extends Path implements Debris, Player {
 
     private final Body body;
     private final float mass;
@@ -34,7 +36,7 @@ class Ship extends Path implements Debris {
 
         body = world.createBody(bodyDef);
         body.createFixture(fixtureDef).setUserData(this);
-        body.applyLinearImpulse(new Vec2(1, 1), new Vec2());
+        //body.applyLinearImpulse(new Vec2(1, 1), new Vec2());
 
         mass = density * radius;
 
@@ -93,9 +95,27 @@ class Ship extends Path implements Debris {
     @Override
     public void updatePosition(Collection<Debris> debris) {
         updateForce(debris);
-        updatePosition();
+        updateSpaceWrap();
 
         setTranslateX(body.getPosition().x * SCALE);
         setTranslateY(body.getPosition().y * SCALE);
+    }
+
+    @Override
+    public void handle(KeyEvent event) {
+
+        if (event.getCode().equals(KeyCode.LEFT)) {
+            //body.setTransform(body.getPosition(), );
+            this.setRotate(this.getRotate() + 2);
+            event.consume();
+        }
+        else if (event.getCode().equals(KeyCode.RIGHT)) {
+            this.setRotate(this.getRotate() - 2);
+            event.consume();
+        }
+        else if (event.getCode().equals(KeyCode.UP)) {
+            body.setLinearVelocity(body.getLinearVelocity().addLocal(1, 1));
+            event.consume();
+        }
     }
 }

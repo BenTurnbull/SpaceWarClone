@@ -13,7 +13,7 @@ interface Debris {
 
     void updatePosition(Collection<Debris> debris);
 
-    default void updatePosition() {
+    default void updateSpaceWrap() {
         if (!getBody().isAwake()) {
             return;
         }

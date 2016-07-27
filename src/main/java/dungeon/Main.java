@@ -1,8 +1,5 @@
 package dungeon;
 
-import java.io.IOException;
-import java.util.function.Consumer;
-
 import dungeon.game.Game;
 import dungeon.game.SolarSystem;
 import dungeon.loop.FixedSteps;
@@ -10,12 +7,15 @@ import dungeon.loop.GameLoop;
 import javafx.application.Application;
 import javafx.scene.Scene;
 import javafx.scene.control.Label;
-import javafx.scene.input.InputEvent;
+import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.Pane;
 import javafx.stage.Stage;
 import org.jbox2d.common.Vec2;
 import org.jbox2d.dynamics.World;
+
+import java.io.IOException;
+import java.util.function.Consumer;
 
 public class Main extends Application {
 
@@ -50,7 +50,7 @@ public class Main extends Application {
         gameLoop.start();
 
         Scene scene = new Scene(root, WIDTH * SCALE, HEIGHT * SCALE);
-        scene.addEventHandler(InputEvent.ANY, game);
+        scene.addEventHandler(KeyEvent.KEY_PRESSED, game);
 
         stage.setScene(scene);
         stage.setTitle("Solar system");

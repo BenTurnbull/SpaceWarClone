@@ -1,11 +1,11 @@
 package dungeon.game;
 
 import javafx.event.EventHandler;
-import javafx.scene.input.InputEvent;
+import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.Pane;
 import org.jbox2d.dynamics.World;
 
-public interface Game extends EventHandler<InputEvent> {
+public interface Game extends EventHandler<KeyEvent> {
     /*
      * Load the game into the given world.
      */
@@ -17,5 +17,5 @@ public interface Game extends EventHandler<InputEvent> {
     void updatePositions();
 
     @Override
-    void handle(InputEvent event);
+    void handle(KeyEvent event);
 }
