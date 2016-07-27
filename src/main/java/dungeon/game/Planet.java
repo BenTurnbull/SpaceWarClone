@@ -61,6 +61,7 @@ class Planet extends Circle implements Debris {
     @Override
     public void updatePosition(Collection<Debris> debris) {
         updateForce(debris);
+        updatePosition();
 
         setTranslateX(body.getPosition().x * SCALE);
         setTranslateY(body.getPosition().y * SCALE);

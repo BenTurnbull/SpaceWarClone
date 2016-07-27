@@ -1,5 +1,6 @@
 package dungeon.game;
 
+import dungeon.Main;
 import org.jbox2d.common.Vec2;
 import org.jbox2d.dynamics.Body;
 
@@ -11,6 +12,28 @@ interface Debris {
     float getMass();
 
     void updatePosition(Collection<Debris> debris);
+
+    default void updatePosition() {
+        if (!getBody().isAwake()) {
+            return;
+        }
+
+        Vec2 this_position = this.getBody().getWorldCenter();
+
+        if (this_position.x > Main.WIDTH) {
+            this_position.x = 0;
+        } else if (this_position.x < 0) {
+            this_position.x = Main.WIDTH;
+        }
+
+        if (this_position.y > Main.HEIGHT) {
+            this_position.y = 0;
+        } else if (this_position.y < 0) {
+            this_position.y = Main.HEIGHT;
+        }
+
+        this.getBody().setTransform(this_position, 0);
+    }
 
     default void updateForce(Collection<Debris> debris) {
         if (!getBody().isAwake()) {

@@ -10,10 +10,7 @@ import javafx.scene.paint.Color;
 import org.jbox2d.callbacks.ContactImpulse;
 import org.jbox2d.callbacks.ContactListener;
 import org.jbox2d.collision.Manifold;
-import org.jbox2d.collision.shapes.PolygonShape;
 import org.jbox2d.common.Vec2;
-import org.jbox2d.dynamics.Body;
-import org.jbox2d.dynamics.BodyDef;
 import org.jbox2d.dynamics.Fixture;
 import org.jbox2d.dynamics.World;
 import org.jbox2d.dynamics.contacts.Contact;
@@ -25,7 +22,7 @@ import static dungeon.Main.*;
 
 public class SolarSystem implements Game, ContactListener {
 
-    private final int numberOfPlanets = 20;
+    private final int numberOfPlanets = 100;
 
     private final List<Debris> debris = new ArrayList<>();
     private final List<Debris> markedForDestruction = new ArrayList<>(); // Cannot destroy bodies during world-step/collision-callback
@@ -40,7 +37,6 @@ public class SolarSystem implements Game, ContactListener {
         pane.setBackground(new Background(new BackgroundFill(Color.BLACK, CornerRadii.EMPTY, Insets.EMPTY)));
         pane.setMinSize(WIDTH * SCALE, HEIGHT * SCALE);
 
-        createBorders(world);
         world.setContactListener(this);
 
         debris.clear();
@@ -61,30 +57,6 @@ public class SolarSystem implements Game, ContactListener {
 
     }
 
-    private void createBorders(World world) {
-        BodyDef ceilingDef = new BodyDef();
-        ceilingDef.position.set(WIDTH / 2, -1f);
-        Body ceiling = world.createBody(ceilingDef);
-        PolygonShape ceilingShape = new PolygonShape();
-        ceilingShape.setAsBox(WIDTH / 2, 1f);
-        ceiling.createFixture(ceilingShape, 0f);
-        BodyDef floorDef = new BodyDef();
-        floorDef.position.set(WIDTH / 2, HEIGHT + 1);
-        Body floor = world.createBody(floorDef);
-        floor.createFixture(ceilingShape, 0f);
-
-        BodyDef leftWallDef = new BodyDef();
-        leftWallDef.position.set(-1f, HEIGHT);
-        BodyDef rightWallDef = new BodyDef();
-        rightWallDef.position.set(WIDTH + 1, HEIGHT);
-        Body leftWall = world.createBody(leftWallDef);
-        Body rightWall = world.createBody(rightWallDef);
-        PolygonShape wallShape = new PolygonShape();
-        wallShape.setAsBox(1f, HEIGHT * 2);
-        leftWall.createFixture(wallShape, 0f);
-        rightWall.createFixture(wallShape, 0f);
-    }
-
     @Override
     public void updatePositions() {
         checkForDestruction();
@@ -93,7 +65,7 @@ public class SolarSystem implements Game, ContactListener {
 
     @Override
     public void handle(InputEvent event) {
-
+        // TODO
     }
 
     @Override
@@ -131,5 +103,4 @@ public class SolarSystem implements Game, ContactListener {
 
     @Override
     public void postSolve(Contact contact, ContactImpulse contactImpulse) {}
-
 }

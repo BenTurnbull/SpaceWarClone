@@ -3,14 +3,13 @@ package dungeon.game;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.*;
 import org.jbox2d.collision.shapes.CircleShape;
-import org.jbox2d.collision.shapes.PolygonShape;
 import org.jbox2d.collision.shapes.Shape;
 import org.jbox2d.common.Vec2;
 import org.jbox2d.dynamics.*;
 
 import java.util.Collection;
 
-import static dungeon.Main.*;
+import static dungeon.Main.SCALE;
 
 class Ship extends Path implements Debris {
 
@@ -94,6 +93,7 @@ class Ship extends Path implements Debris {
     @Override
     public void updatePosition(Collection<Debris> debris) {
         updateForce(debris);
+        updatePosition();
 
         setTranslateX(body.getPosition().x * SCALE);
         setTranslateY(body.getPosition().y * SCALE);
