@@ -15,6 +15,9 @@ import static dungeon.Main.SCALE;
 
 class Ship extends Path implements Debris, Player {
 
+    private final static int turnRate = 2;
+    private final static Vec2 forceRate = new Vec2(0, 0);
+
     private final Body body;
     private final float mass;
 
@@ -105,16 +108,21 @@ class Ship extends Path implements Debris, Player {
     public void handle(KeyEvent event) {
 
         if (event.getCode().equals(KeyCode.LEFT)) {
-            //body.setTransform(body.getPosition(), );
-            this.setRotate(this.getRotate() + 2);
+            body.setTransform(body.getPosition(), body.getAngle() - turnRate);
+            setRotate(getRotate() - turnRate);
             event.consume();
         }
         else if (event.getCode().equals(KeyCode.RIGHT)) {
-            this.setRotate(this.getRotate() - 2);
+            body.setTransform(body.getPosition(), body.getAngle() + turnRate);
+            setRotate(getRotate() + turnRate);
             event.consume();
         }
         else if (event.getCode().equals(KeyCode.UP)) {
-            body.setLinearVelocity(body.getLinearVelocity().addLocal(1, 1));
+            body.applyForceToCenter(forceRate);
+            event.consume();
+        }
+        else if (event.getCode().equals(KeyCode.DOWN)) {
+            final float angle = body.getAngle();
             event.consume();
         }
     }

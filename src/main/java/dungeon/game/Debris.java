@@ -63,7 +63,7 @@ interface Debris {
 
                 // Calculate the magnitude of the force to apply to the debris.
                 // This is proportional to the distance between the planet and the debris. The force is weaker the further away the debris.
-                float force = (float)((3f * that.getMass()) / Math.pow(distance.length(), 2));
+                float force = (float)((2f * that.getMass()) / Math.pow(distance.length(), 2));
 
                 // Change the direction of the vector so that the force will be towards the planet.
                 distance = distance.negate();
