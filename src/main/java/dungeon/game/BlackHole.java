@@ -22,11 +22,11 @@ class BlackHole extends Circle implements Debris {
         bodyDef.type = BodyType.STATIC;
         bodyDef.position = position;
 
-        float radius = 0.7f;
+        float radius = 0.3f;
         Shape shape = new CircleShape();
         shape.m_radius = radius;
 
-        float density = 1f;
+        float density = 0.8f;
         FixtureDef fixtureDef = new FixtureDef();
         fixtureDef.shape = shape;
         fixtureDef.density = density;

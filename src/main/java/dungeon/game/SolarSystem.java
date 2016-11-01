@@ -1,8 +1,6 @@
 package dungeon.game;
 
 import javafx.geometry.Insets;
-import javafx.scene.input.InputEvent;
-import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.Background;
 import javafx.scene.layout.BackgroundFill;
@@ -24,14 +22,14 @@ import static dungeon.Main.*;
 
 public class SolarSystem implements Game, ContactListener {
 
-    private final static int satellites = 0;
+    private final static int satellites = 5;
 
     private final List<Player> players = new ArrayList<>();
     private final List<Debris> debris = new ArrayList<>();
     private final List<Debris> markedForDestruction = new ArrayList<>(); // Cannot destroy bodies during world-step/collision-callback
     private World world;
     private Pane pane;
-    private Ship ship;
+    private ShipDirection shipDirection;
 
     @Override
     public void load(World world, Pane pane) {
@@ -49,10 +47,13 @@ public class SolarSystem implements Game, ContactListener {
         debris.add(blackHole1);
         pane.getChildren().add(blackHole1);
 
-        ship = new Ship(world, new Vec2(WIDTH / 8, HEIGHT / 8));
+        Ship ship = new Ship(world, new Vec2(WIDTH / 8, HEIGHT / 8));
         debris.add(ship);
         players.add(ship);
         pane.getChildren().add(ship);
+
+        shipDirection = new ShipDirection(ship);
+        pane.getChildren().add(shipDirection);
 
         for (int i = 0; i < satellites; i++) {
             Planet planet = new Planet(world);
@@ -66,6 +67,7 @@ public class SolarSystem implements Game, ContactListener {
     public void updatePositions() {
         checkForDestruction();
         debris.forEach(debris -> debris.updatePosition(this.debris));
+        shipDirection.updatePosition();
     }
 
     @Override
@@ -89,7 +91,7 @@ public class SolarSystem implements Game, ContactListener {
         }
     }
 
-    private void checkForDestruction() {
+    private synchronized void checkForDestruction() {
         if (markedForDestruction.isEmpty()) return;
         markedForDestruction.forEach(marked -> {
                     debris.remove(marked);

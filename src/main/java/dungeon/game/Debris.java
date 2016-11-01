@@ -19,20 +19,23 @@ interface Debris {
         }
 
         Vec2 this_position = this.getBody().getWorldCenter();
+        Vec2 that_position = this_position.clone();
 
         if (this_position.x > Main.WIDTH) {
-            this_position.x = 0;
+            that_position.x = 0;
         } else if (this_position.x < 0) {
-            this_position.x = Main.WIDTH;
+            that_position.x = Main.WIDTH;
         }
 
         if (this_position.y > Main.HEIGHT) {
-            this_position.y = 0;
+            that_position.y = 0;
         } else if (this_position.y < 0) {
-            this_position.y = Main.HEIGHT;
+            that_position.y = Main.HEIGHT;
         }
 
-        this.getBody().setTransform(this_position, 0);
+        if (!this_position.equals(that_position)) {
+            this.getBody().setTransform(that_position, this.getBody().getAngle());
+        }
     }
 
     default void updateForce(Collection<Debris> debris) {
@@ -59,7 +62,7 @@ interface Debris {
             distance = distance.sub(that_position);
 
             // Check if the distance between debris is within the reach of the gravitational pull.
-            if (distance.length() < that.getMass() * 3) {
+            if (distance.length() < that.getMass() * 4) {
 
                 // Calculate the magnitude of the force to apply to the debris.
                 // This is proportional to the distance between the planet and the debris. The force is weaker the further away the debris.
@@ -70,7 +73,7 @@ interface Debris {
 
                 // Multiply the magnitude of the force to the directional vector.
                 distance = distance.mul(force);
-                this.getBody().applyForce(distance, this_position);
+                this.getBody().applyForceToCenter(distance);
             }
         });
     }
